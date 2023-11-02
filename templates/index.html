@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Test {% endblock %}</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block body %}
+    <h1>Check weather</h1>
+    <form action="/checkweather" method="post">
+        <input type="radio" id="cumbria" name="location" value="Cumbria" aria-label="cumbria">
+        <label for="cumbria">Lake District National Park</label><br>
+        <input type="radio" id="corfe-castle" name="location" value="Corfe Castle"  aria-label="corfe-castle">
+        <label for="corfe-castle">Corfe Castle</label><br>
+        <input type="radio" id="the-cotswolds" name="location" value="The Cotswolds" aria-label="the-cotswolds">
+        <label for="the-cotswolds">The Cotswolds</label><br>
+        <input type="radio" id="bristol" name="location" value="Bristol" aria-label="bristol">
+        <label for="bristol">Bristol</label><br>
+        <input type="radio" id="oxford" name="location" value="Oxford"  aria-label="oxford">
+        <label for="oxford">Oxford</label><br>
+        <input type="radio" id="norwich" name="location" value="Norwich" aria-label="norwich">
+        <label for="norwich">Norwich</label><br>
+        <input type="radio" id="stonehenge" name="location" value="Stonehenge" aria-label="stonehenge">
+        <label for="stonehenge">Stonehenge</label><br>
+        <input type="radio" id="watergate-bay" name="location" value="Watergate Bay"  aria-label="watergate-bay">
+        <label for="watergate-bay">Watergate Bay</label><br>
+        <input type="radio" id="birmingham" name="location" value="Birmingham" aria-label="birmingham">
+        <label for="birmingham">Birmingham</label><br>
+        <input type="submit" value="Check weather" aria-label="submit"/>
+    </form>
+    {% endblock %}
+</body>
+</html>
