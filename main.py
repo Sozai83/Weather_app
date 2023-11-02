@@ -57,7 +57,7 @@ class Weather:
         self.altitude = altitude
     
     def check_weather(self):
-        resp = requests.get(f'{weather_url}?lat={self.latitude}&lon={self.altitude}&appid={weather_api_key}')
+        resp = requests.get(f'{weather_url}?lat={self.latitude}&lon={self.altitude}&units=metric&appid={weather_api_key}')
         
         if resp.status_code == 200:
             self.weather = resp.json()
