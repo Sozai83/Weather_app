@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Test {% endblock %}</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block body %}
+    <h1>Weather for {{location}}</h1>
+    <h2>Date: {{date}}</h2>
+    <table>
+        <tbody>
+            <tr>
+                <td><img src="{{icon}}" alt="{{weather}}"/></td>
+                <td>{{weather}}</td>
+            </tr>
+            <tr>
+                <td>Current Temprature:</td>
+                <td>{{temp}} ℃</td>
+            </tr>
+            <tr>
+                <td>Minimum Temprature:</td>
+                <td>{{temp_min}} ℃</td>
+            </tr>
+            <tr>
+                <td>Maximum Temprature:</td>
+                <td>{{temp_max}} ℃</td>
+            </tr>
+            <tr>
+                <td>Humidity:</td>
+                <td>{{humidity}} %</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endblock %}
+</body>
+</html>

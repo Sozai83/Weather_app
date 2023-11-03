@@ -1,6 +1,7 @@
 from flask import Flask, url_for, render_template, request, redirect
 import requests, os
 from pprint import pprint
+from datetime import datetime
 
 
 
@@ -22,7 +23,16 @@ def check_weather():
         if geo_code.latitude and geo_code.altitude:
             weather = Weather(location, geo_code.latitude, geo_code.altitude)
             weather.check_weather()
-            return weather.weather
+            return render_template('weather.html', 
+                                   weather = weather.weather,
+                                   temp = weather.temp,
+                                   temp_max = weather.temp_max,
+                                   temp_min = weather.temp_min,
+                                   humidity = weather.humidity,
+                                   icon = weather.icon,
+                                   date = weather.date,
+                                   location = location
+                                   )
         else:
             return 'Please select valid location'
 
@@ -60,8 +70,14 @@ class Weather:
         resp = requests.get(f'{weather_url}?lat={self.latitude}&lon={self.altitude}&units=metric&appid={weather_api_key}')
         
         if resp.status_code == 200:
-            self.weather = resp.json()
-            print(resp.json())
+            resp_json = resp.json()
+            self.weather = resp_json['weather'][0]['main']
+            self.temp = resp_json['main']['temp']
+            self.temp_max = resp_json['main']['temp_max']
+            self.temp_min = resp_json['main']['temp_min']
+            self.humidity = resp_json['main']['humidity']
+            self.icon = f"https://openweathermap.org/img/wn/{resp_json['weather'][0]['icon']}@2x.png"
+            self.date = datetime.utcfromtimestamp(resp_json["dt"]).strftime('%Y-%m-%d')
         else:
             print(resp.status_code)
 
