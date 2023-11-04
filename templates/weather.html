@@ -27,5 +27,32 @@
             </tr>
         </tbody>
     </table>
+    <table>
+        <tbody class="forecast">
+            <tr>
+                {% for weather in next_7days %}
+                <td>
+                    <table>
+                        <thead>
+                            <tr class="date">
+                                <th colspan="2">{{weather['date']}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="weather">
+                                <td><img src="{{weather['icon']}}" alt="{{weather['weather']}}"/></td>
+                                <td>{{weather['weather']}}</td>                                
+                            </tr>
+                            <tr class="temp">
+                                <td>{{weather['temp_min']}}</td>
+                                <td>{{weather['temp_max']}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
     <a href="/"><button>Return to homepage</button></a>
 {% endblock %}
