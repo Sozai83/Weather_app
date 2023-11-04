@@ -17,12 +17,14 @@ def home():
 def check_weather():
     if request.method == 'POST':
         location = request.form['location']
+        unit = request.form['unit']
         geo_code = Geocode(location)
         geo_code.check_geocode()
 
         if geo_code.latitude and geo_code.altitude:
-            weather = Weather(location, geo_code.latitude, geo_code.altitude)
+            weather = Weather(location, geo_code.latitude, geo_code.altitude,unit)
             weather.check_weather()
+            weather.check_weather_forecast()
             return render_template('weather.html', 
                                    weather = weather.weather,
                                    temp = weather.temp,
@@ -31,7 +33,9 @@ def check_weather():
                                    humidity = weather.humidity,
                                    icon = weather.icon,
                                    date = weather.date,
-                                   location = location
+                                   location = location,
+                                   unit = weather.unit,
+                                   next_7days = weather.weather_next_7days
                                    )
         else:
             return 'Please select valid location'
@@ -41,6 +45,7 @@ geocode_api_key = os.environ.get('GoogleMapAPIKey')
 weather_api_key = os.environ.get('OpenWeather_API_key')
 geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
 weather_url = 'https://api.openweathermap.org/data/2.5/weather'
+weather_forecast_url = 'https://api.openweathermap.org/data/3.0/onecall'
 
 
 class Geocode:
@@ -66,13 +71,14 @@ class Geocode:
 
 
 class Weather:
-    def __init__(self, location, latitude, altitude):
+    def __init__(self, location, latitude, altitude, unit='metric'):
         self.location = location
         self.latitude = latitude
         self.altitude = altitude
+        self.unit = unit
     
     def check_weather(self):
-        resp = requests.get(f'{weather_url}?lat={self.latitude}&lon={self.altitude}&units=metric&appid={weather_api_key}')
+        resp = requests.get(f'{weather_url}?lat={self.latitude}&lon={self.altitude}&units={self.unit}&appid={weather_api_key}')
         
         if resp.status_code == 200:
             resp_json = resp.json()
@@ -82,11 +88,27 @@ class Weather:
             self.temp_min = resp_json['main']['temp_min']
             self.humidity = resp_json['main']['humidity']
             self.icon = f"https://openweathermap.org/img/wn/{resp_json['weather'][0]['icon']}@2x.png"
-            self.date = datetime.utcfromtimestamp(resp_json["dt"]).strftime('%Y-%m-%d')
+            self.date = datetime.utcfromtimestamp(resp_json["dt"]).strftime('%Y/%m/%d %I%p')
+        else:
+            print(f'{weather_url}?lat={self.latitude}&lon={self.altitude}&units={self.unit}&appid={weather_api_key}', esp.status_code)
+
+    def check_weather_forecast(self):
+        resp = requests.get(f'{weather_forecast_url}?lat={self.latitude}&lon={self.altitude}&units={self.unit}&exclude=hourly,current,minutely,alerts&appid={weather_api_key}')
+        
+        if resp.status_code == 200:
+            weather_next_7days = map(lambda x: 
+                                    {
+                                        'date': datetime.utcfromtimestamp(x['dt']).strftime('%m/%d'), 
+                                        'temp_min': x['temp']['min'],
+                                        'temp_max': x['temp']['max'],
+                                        'weather': x['weather'][0]['main'],
+                                        'icon': f"https://openweathermap.org/img/wn/{x['weather'][0]['icon']}.png"
+                                    } 
+                                    ,resp.json()['daily'][1:])
+            self.weather_next_7days = list(weather_next_7days)
+            
         else:
             print(resp.status_code)
-
-
 
 locations = {
     'Lake District National Park': {
