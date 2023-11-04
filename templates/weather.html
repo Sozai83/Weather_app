@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>{% block title %}Test {% endblock %}</title>
-</head>
-<body>
-    {% extends 'base.html' %}
-    {% block body %}
+{% extends 'base.html' %}
+{% block title %}Weather for {{location}}{% endblock %}
+{% block body %}
     <h1>Weather for {{location}}</h1>
     <h2>Date: {{date}}</h2>
     <table>
@@ -16,15 +11,15 @@
             </tr>
             <tr>
                 <td>Current Temprature:</td>
-                <td>{{temp}} ℃</td>
+                <td>{{temp}} {{'℃' if unit=='metric' else '°F'}}</td>
             </tr>
             <tr>
                 <td>Minimum Temprature:</td>
-                <td>{{temp_min}} ℃</td>
+                <td>{{temp_min}} {{'℃' if unit=='metric' else '°F'}}</td>
             </tr>
             <tr>
                 <td>Maximum Temprature:</td>
-                <td>{{temp_max}} ℃</td>
+                <td>{{temp_max}} {{'℃' if unit=='metric' else '°F'}}</td>
             </tr>
             <tr>
                 <td>Humidity:</td>
@@ -32,6 +27,5 @@
             </tr>
         </tbody>
     </table>
-    {% endblock %}
-</body>
-</html>
+    <a href="/"><button>Return to homepage</button></a>
+{% endblock %}

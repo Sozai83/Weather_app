@@ -1,19 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>{% block title %}Test {% endblock %}</title>
-</head>
-<body>
-    {% extends 'base.html' %}
-    {% block body %}
-    <h1>Check weather</h1>
-    <form action="/checkweather" method="post">
-        {% for location in locations.items()%}
-        <input type="radio" id="{{location[1]['id']}}" name="location" value="{{location[1]['name']}}" aria-label="{{location[1]['id']}}">
-        <label for="{{location[1]['id']}}">{{location[1]['name']}}</label><br>
-        {% endfor %}
-        <input type="submit" value="Check weather" aria-label="submit"/>
-    </form>
-    {% endblock %}
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Check Weather{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/index.css') }}"/>
+{% endblock %}
+{% block body %}
+    <section class="form">
+        <h1>Check weather</h1>
+        <form action="/checkweather" method="post">
+            <h3>Please pick location:</h3>
+            {% for location in locations.items()%}
+                <input type="radio" id="{{location[1]['id']}}" name="location" value="{{location[1]['name']}}" aria-label="{{location[1]['id']}}">
+                <label for="{{location[1]['id']}}">{{location[1]['name']}}</label><br>
+            {% endfor %}
+            <h3>Please pick unit:</h3>
+            <input type="radio" id="celsius" name="unit" value="metric" aria-label="celsius" checked>
+            <label for="">Celsius</label><br>
+            <input type="radio" id="kelvin" name="unit" value="imperial" aria-label="Kelvin">
+            <label for="">Kelvin</label><br><br>
+            <input type="submit" value="Check weather" aria-label="submit"/>
+        </form>
+    </section>
+{% endblock %}
