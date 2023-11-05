@@ -8,7 +8,7 @@ h1, h2{
 }
 
 .forecast-table{
-    margin: 20px auto;
+    margin: 40px auto;
 }
 
 .forecast{
@@ -40,4 +40,9 @@ h1, h2{
     font-size: 1em;
     border-radius: 5px;
     cursor: pointer;
+}
+
+iframe{
+    display: block;
+    margin: 10px auto;
 }

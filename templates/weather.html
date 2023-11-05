@@ -30,6 +30,16 @@
             </tr>
         </tbody>
     </table>
+    {%if map%}
+    <iframe
+        width="450"
+        height="250"
+        frameborder="0" style="border:0"
+        referrerpolicy="no-referrer-when-downgrade"
+        src="{{map}}"
+        allowfullscreen>
+        </iframe>
+    {% endif %}
     <table class="forecast-table">
         <tbody class="forecast">
             <tr class="forecast-separator">

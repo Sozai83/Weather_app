@@ -37,7 +37,10 @@ def check_weather():
                                     date = weather.date,
                                     location = location,
                                     unit = weather.unit,
-                                    next_7days = weather.weather_next_7days
+                                    next_7days = weather.weather_next_7days,
+                                    latitude = weather.latitude,
+                                    altitude = weather.altitude,
+                                    map= weather.map
                                     )
             else:
                 return 'Please select valid location'
@@ -45,8 +48,10 @@ def check_weather():
             return redirect(url_for('home'))
 
 geocode_api_key = os.environ.get('GoogleMapAPIKey')
+map_api_key = os.environ.get('GoogleMapAPIKeyLimited')
 weather_api_key = os.environ.get('OpenWeather_API_key')
 geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
+map_url = 'https://www.google.com/maps/embed/v1/place'
 weather_url = 'https://api.openweathermap.org/data/2.5/weather'
 weather_forecast_url = 'https://api.openweathermap.org/data/3.0/onecall'
 
@@ -78,9 +83,10 @@ class Weather:
         self.latitude = latitude
         self.altitude = altitude
         self.unit = unit
+        self.map = f'{map_url}?key={map_api_key}&q={self.latitude},{self.altitude}'
     
     def check_weather(self):
-        resp = requests.get(f'{weather_url}?lat={self.latitude}&lon={self.altitude}&units={self.unit}&appid={weather_api_key}')
+        resp = requests.get(f'{weather_url}?lat={self.latitude}&lon={self.altitude}&units={self.unit}&zoom=0&appid={weather_api_key}')
         
         if resp.status_code == 200:
             resp_json = resp.json()
@@ -112,6 +118,9 @@ class Weather:
         else:
             self.weather_next_7days = 'Unable to retrieve forecasts. Please refresh the page.'
             print(resp.status_code)
+
+
+
 
 
 if __name__ == "__main__":
