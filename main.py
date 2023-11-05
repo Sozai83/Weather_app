@@ -2,6 +2,7 @@ from flask import Flask, url_for, render_template, request, redirect
 import requests, os
 from pprint import pprint
 from datetime import datetime
+from locations import locations
 
 
 
@@ -16,29 +17,32 @@ def home():
 @app.route('/checkweather', methods=['POST'])
 def check_weather():
     if request.method == 'POST':
-        location = request.form['location']
-        unit = request.form['unit']
-        geo_code = Geocode(location)
-        geo_code.check_geocode()
+        try:
+            location = request.form['location']
+            unit = request.form['unit']
+            geo_code = Geocode(location)
+            geo_code.check_geocode()
 
-        if geo_code.latitude and geo_code.altitude:
-            weather = Weather(location, geo_code.latitude, geo_code.altitude,unit)
-            weather.check_weather()
-            weather.check_weather_forecast()
-            return render_template('weather.html', 
-                                   weather = weather.weather,
-                                   temp = weather.temp,
-                                   temp_max = weather.temp_max,
-                                   temp_min = weather.temp_min,
-                                   humidity = weather.humidity,
-                                   icon = weather.icon,
-                                   date = weather.date,
-                                   location = location,
-                                   unit = weather.unit,
-                                   next_7days = weather.weather_next_7days
-                                   )
-        else:
-            return 'Please select valid location'
+            if geo_code.latitude and geo_code.altitude:
+                weather = Weather(location, geo_code.latitude, geo_code.altitude,unit)
+                weather.check_weather()
+                weather.check_weather_forecast()
+                return render_template('weather.html', 
+                                    weather = weather.weather,
+                                    temp = weather.temp,
+                                    temp_max = weather.temp_max,
+                                    temp_min = weather.temp_min,
+                                    humidity = weather.humidity,
+                                    icon = weather.icon,
+                                    date = weather.date,
+                                    location = location,
+                                    unit = weather.unit,
+                                    next_7days = weather.weather_next_7days
+                                    )
+            else:
+                return 'Please select valid location'
+        except:
+            return redirect(url_for('home'))
 
 
 geocode_api_key = os.environ.get('GoogleMapAPIKey')
@@ -108,65 +112,8 @@ class Weather:
             self.weather_next_7days = list(weather_next_7days)
             
         else:
+            self.weather_next_7days = 'Unable to retrieve forecasts. Please refresh the page.'
             print(resp.status_code)
-
-locations = {
-    'Lake District National Park': {
-        'id': 'cumbria',
-        'name': 'Lake District National Park',
-        'lat': 54.4609,
-        'alt': -3.0886
-    },
-    'the_cotswolds':{
-        'id': 'the_cotswolds',
-        'name': 'The Cotswolds',
-        'lat': 50.6395,
-        'alt': -2.0566
-    },
-    'cambridge':{
-        'id': 'cambridge',
-        'name': 'Cambridge ',
-        'lat': 52.2053,
-        'alt': 0.1218
-    },
-    'bristol':{
-        'id': 'bristol',
-        'name': 'Bristol',
-        'lat': 51.4545,
-        'alt': -2.5879
-    },
-    'oxford':{
-        'id': 'oxford',
-        'name': 'Oxford',
-        'lat': 51.7520,
-        'alt': -1.2577
-    },
-    'norwich':{
-        'id': 'norwich',
-        'name': 'Norwich',
-        'lat': 52.6309,
-        'alt': 1.2974
-    },
-    'stonehenge':{
-        'id': 'stonehenge',
-        'name': 'Stonehenge',
-        'lat': 51.1789,
-        'alt': -1.8262
-    },
-    'watergate_bay':{
-        'id': 'watergate_bay',
-        'name': 'Watergate Bay',
-        'lat': 50.4429,
-        'alt': -5.0553
-    },
-    'birmingham':{
-        'id': 'birmingham',
-        'name': 'Birmingham',
-        'lat': 52.4862,
-        'alt': -1.8904
-    }
-    
-}
 
 
 if __name__ == "__main__":
