@@ -1,0 +1,43 @@
+h1, h2{
+    margin: 20px auto 0 auto;
+    text-align: center;
+}
+
+.cur-weather-table{
+    margin: 40px auto;
+}
+
+.forecast-table{
+    margin: 20px auto;
+}
+
+.forecast{
+    display: flex;
+}
+
+.forecast-separator > td {
+    padding: 0 10px;
+    border-left: 2px solid black
+}
+
+.min{
+    color: blue;
+}
+
+.max{
+    color: red;
+}
+
+.return-home{
+    text-decoration: none;
+}
+.return-home > button{
+    display: block;
+    margin: 20px auto;
+    border: none;
+    text-decoration: none;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+}

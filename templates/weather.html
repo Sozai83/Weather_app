@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Weather for {{location}}{% endblock %}
+{% block title %}Weather in {{location}}{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/weather.css') }}"/>
+{% endblock %}
 {% block body %}
-    <h1>Weather for {{location}}</h1>
+    <h1>Weather in {{location}}</h1>
     <h2>Date: {{date}}</h2>
-    <table>
+    <table class="cur-weather-table">
         <tbody>
             <tr>
                 <td><img src="{{icon}}" alt="{{weather}}"/></td>
@@ -27,9 +30,9 @@
             </tr>
         </tbody>
     </table>
-    <table>
+    <table class="forecast-table">
         <tbody class="forecast">
-            <tr>
+            <tr class="forecast-separator">
                 {% for weather in next_7days %}
                 <td>
                     <table>
@@ -44,8 +47,8 @@
                                 <td>{{weather['weather']}}</td>                                
                             </tr>
                             <tr class="temp">
-                                <td>{{weather['temp_min']}}</td>
-                                <td>{{weather['temp_max']}}</td>
+                                <td class="min">{{weather['temp_min']}} {{'℃' if unit=='metric' else '°F'}}</td>
+                                <td class="max">{{weather['temp_max']}} {{'℃' if unit=='metric' else '°F'}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -54,5 +57,5 @@
             </tr>
         </tbody>
     </table>
-    <a href="/"><button>Return to homepage</button></a>
+    <a href="/" class="return-home"><button>Return to homepage</button></a>
 {% endblock %}

@@ -1,5 +1,33 @@
+h1{
+    text-align: center;
+}
+
 .form{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+form{
+    margin: 0 auto;
+}
+
+
+input, label{
+    cursor: pointer;
+}
+
+input{
+    margin-bottom: 6px;
+}
+
+.submit{
+    display: block;
+    margin: 20px auto;
+    border: none;
+    text-decoration: none;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
 }

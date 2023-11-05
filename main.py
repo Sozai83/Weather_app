@@ -44,7 +44,6 @@ def check_weather():
         except:
             return redirect(url_for('home'))
 
-
 geocode_api_key = os.environ.get('GoogleMapAPIKey')
 weather_api_key = os.environ.get('OpenWeather_API_key')
 geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
@@ -68,7 +67,6 @@ class Geocode:
             if resp.status_code == 200 and status != 'ZERO_RESULTS':
                 self.latitude = resp.json()['results'][0]['geometry']['location']['lat']
                 self.altitude = resp.json()['results'][0]['geometry']['location']['lng']
-                print(self.latitude, self.altitude)
             else:
                 print(status)
         

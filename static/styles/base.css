@@ -4,7 +4,3 @@ body{
     max-width: 1200px;
     font-family: Arial, sans-serif;
 }
-
-.forecast{
-    display: flex;
-}
