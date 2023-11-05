@@ -45,7 +45,13 @@ def check_weather():
             else:
                 return 'Please select valid location'
         except:
-            return redirect(url_for('home'))
+            return redirect(url_for('error'))
+        
+
+@app.route('/error/')
+def error():
+    return render_template('error.html')
+
 
 geocode_api_key = os.environ.get('GoogleMapAPIKey')
 map_api_key = os.environ.get('GoogleMapAPIKeyLimited')
@@ -118,9 +124,6 @@ class Weather:
         else:
             self.weather_next_7days = 'Unable to retrieve forecasts. Please refresh the page.'
             print(resp.status_code)
-
-
-
 
 
 if __name__ == "__main__":

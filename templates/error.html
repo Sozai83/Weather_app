@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Error {{stauts_code}}{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/error.css') }}"/>
+{% endblock %}
+{% block body %}
+    <h3>Something went wrong.</h3>
+    <p>Please try again. If you keep having this issue, please contact support.</p>
+    <a href="/" class="return-home"><button>Return to homepage</button></a>
+{% endblock %}
