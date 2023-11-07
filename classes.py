@@ -56,7 +56,7 @@ class Weather:
         self.latitude = latitude
         self.longitude = longitude
         self.unit = unit
-        self.map = f'{map_url}?key={map_api_key}&q={self.latitude},{self.longitude}'
+        self.map = f'{map_url}?key={map_api_key}&q={self.latitude},{self.longitude}&zoom=7'
     
     # Get current weather for the location
     def check_weather(self):
