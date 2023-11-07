@@ -6,12 +6,12 @@
 {% block body %}
     <h1>Weather application</h1>
     <section class="weather_map">
-        <h2>Weather overview</h2>
+        <h2>Live overview</h2>
         <img src="{{gmap}}" alt="Weather map of destinations" loading="lazy"/>
     </section>
     <section class="form">
         <form action="/checkweather" method="post">
-            <h2>Check weather for a location</h2>
+            <h2>Check detailed forecast for a location</h2>
             <h3>Please pick a location:</h3>
             {% for location in locations.items()%}
                 <input type="radio" id="{{location[1]['id']}}" name="location" value="{{location[1]['name']}}" aria-label="{{location[1]['id']}}">
