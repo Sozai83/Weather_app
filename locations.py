@@ -6,7 +6,7 @@ locations = {
         'lng': -3.0886
     },
     'Corfe Castle':{
-        'id': 'the_cotswolds',
+        'id': 'corfe_castle',
         'name': 'Corfe Castle',
         'lat': 50.6395,
         'lng': -2.0566

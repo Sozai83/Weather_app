@@ -6,5 +6,8 @@
 {% block body %}
     <h3>Something went wrong.</h3>
     <p>Please try again. If you keep having this issue, please contact support.</p>
+    {%if error_msg %}
+    <p>Error: {{error_msg}}</p>
+    {% endif %}
     <a href="/" class="return-home"><button>Return to homepage</button></a>
 {% endblock %}

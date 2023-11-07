@@ -1,4 +1,4 @@
-from flask import Flask, url_for, render_template, request, redirect
+from flask import Flask, url_for, render_template, request, redirect, jsonify
 import requests, os, json, threading
 from datetime import datetime
 from locations import locations
@@ -30,6 +30,8 @@ class Geocode:
         if self.location in locations:
             self.latitude = locations[self.location]['lat']
             self.longitude = locations[self.location]['lng']
+
+            return self.latitude, self.longitude
         
         # Otherwise, retrieve latitude and longitude using google geocode API
         else:
@@ -39,8 +41,11 @@ class Geocode:
             if resp.status_code == 200 and status != 'ZERO_RESULTS':
                 self.latitude = resp.json()['results'][0]['geometry']['location']['lat']
                 self.longitude = resp.json()['results'][0]['geometry']['location']['lng']
+                
+                return self.latitude, self.longitude
+
             else:
-                return resp.status_code
+                return  jsonify(message=f'Filed to retrieve geocode. Please try again. Error:{resp.status_code}', status=resp.status_code)
         
 
 
@@ -66,8 +71,10 @@ class Weather:
             self.icon = f"https://openweathermap.org/img/wn/{resp_json['weather'][0]['icon']}@2x.png"
             self.icon_small = f"https://openweathermap.org/img/wn/{resp_json['weather'][0]['icon']}.png"
             self.date = datetime.utcfromtimestamp(resp_json["dt"]).strftime('%Y/%m/%d %I%p')
+
+            return (self.weather,self.temp, self.temp_max, self.temp_min, self.humidity, self.icon, self.icon_small, self.date)
         else:
-            print(resp.status_code)
+            return jsonify(message=f'Filed to retrieve current weather. Please try again. Error:{resp.status_code}', status=resp.status_code)
 
     # Get weather forecast for next 8 days for the location
     def check_weather_forecast(self):
@@ -84,6 +91,8 @@ class Weather:
                                     } 
                                     ,resp.json()['daily'][1:])
             self.weather_next_7days = list(weather_next_7days)
+
+            return self.weather_next_7days
             
         else:
-            return resp.status_code
+            return  jsonify(message=f'Filed to retrieve weather forecast data. Please try again. Error:{resp.status_code}', status=resp.status_code)
