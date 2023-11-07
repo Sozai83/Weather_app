@@ -17,6 +17,9 @@
                 <input type="radio" id="{{location[1]['id']}}" name="location" value="{{location[1]['name']}}" aria-label="{{location[1]['id']}}">
                 <label for="{{location[1]['id']}}">{{location[1]['name']}}</label><br>
             {% endfor %}
+                <input type="radio" id="other" name="location" value="Other" aria-label="Other">
+                <label for="other">Other</label><br>
+                <input type="text" name="location_other" placeholder="Type in a location name" aria-label="Other"/>
             <h3>Please pick unit:</h3>
             <input type="radio" id="celsius" name="unit" value="metric" aria-label="celsius" checked>
             <label for="celsius">Celsius</label><br>

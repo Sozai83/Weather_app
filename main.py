@@ -49,7 +49,9 @@ def home():
 def check_weather():
 
     try:
-        location = request.form['location']
+        print(request.form['location'])
+        print(request.form['location_other'])
+        location = request.form['location'] if request.form['location'] != 'Other' else request.form['location_other']
         unit = request.form['unit'] if request.form['unit'] else 'metric'
 
         # Create a Geocode object
