@@ -1,12 +1,8 @@
 from flask import Flask, url_for, render_template, request, redirect
 import requests, os, json, threading
 import concurrent.futures
-from pprint import pprint
 from datetime import datetime
 from locations import locations
-import pandas as pd
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
 from classes import Weather, Geocode, map_api_key
 
 
