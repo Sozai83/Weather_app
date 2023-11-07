@@ -88,7 +88,7 @@ def check_weather():
             return redirect(url_for('error', error_msg='Location or weather failed to be retrieved. Please try again.'))
     # If an error occurs, return the error page
     except:
-        return redirect(url_for('error', error_msg='Location was not selected. Please try again.'))
+        return redirect(url_for('error', error_msg='Location was not selected or the location could not be found. Please try again.'))
 
         
 
