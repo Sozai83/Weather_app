@@ -4,10 +4,15 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/index.css') }}"/>
 {% endblock %}
 {% block body %}
+    <h1>Weather application</h1>
+    <section class="weather_map">
+        <h2>Weather overview</h2>
+        <img src="{{gmap}}" alt="Weather map of destinations" loading="lazy"/>
+    </section>
     <section class="form">
-        <h1>Check weather</h1>
         <form action="/checkweather" method="post">
-            <h3>Please pick location:</h3>
+            <h2>Check weather for a location</h2>
+            <h3>Please pick a location:</h3>
             {% for location in locations.items()%}
                 <input type="radio" id="{{location[1]['id']}}" name="location" value="{{location[1]['name']}}" aria-label="{{location[1]['id']}}">
                 <label for="{{location[1]['id']}}">{{location[1]['name']}}</label><br>

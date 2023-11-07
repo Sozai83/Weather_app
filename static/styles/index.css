@@ -2,6 +2,15 @@ h1{
     text-align: center;
 }
 
+.weather_map{
+    text-align: center;
+}
+
+.weather_map img{
+    margin: 0 auto;
+    display: block;
+}
+
 .form{
     display: flex;
     flex-direction: column;
