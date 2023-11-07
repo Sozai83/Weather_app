@@ -40,6 +40,7 @@
         allowfullscreen>
         </iframe>
     {% endif %}
+    {% if next_7days %}
     <table class="forecast-table">
         <tbody class="forecast">
             <tr class="forecast-separator">
@@ -67,5 +68,7 @@
             </tr>
         </tbody>
     </table>
+    <p><span class="min">Left: Min Temp</spanL>/ <span class="max">Right: Max Temp</span></p>
+    {% endif %}
     <a href="/" class="return-home"><button>Return to homepage</button></a>
 {% endblock %}

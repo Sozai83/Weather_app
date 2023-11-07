@@ -1,7 +1,8 @@
 from flask import Flask, url_for, render_template, request, redirect, jsonify
-import requests, os, json, threading
+import requests, os, json, threading, asyncio
 from datetime import datetime
 from locations import locations
+
 
 # API Key for geocode_url
 geocode_api_key = os.environ.get('GoogleMapAPIKey')
@@ -72,7 +73,7 @@ class Weather:
             self.icon_small = f"https://openweathermap.org/img/wn/{resp_json['weather'][0]['icon']}.png"
             self.date = datetime.utcfromtimestamp(resp_json["dt"]).strftime('%Y/%m/%d %I%p')
 
-            return (self.weather,self.temp, self.temp_max, self.temp_min, self.humidity, self.icon, self.icon_small, self.date)
+            return self.weather,self.temp, self.temp_max, self.temp_min, self.humidity, self.icon, self.icon_small, self.date
         else:
             return jsonify(message=f'Filed to retrieve current weather. Please try again. Error:{resp.status_code}', status=resp.status_code)
 

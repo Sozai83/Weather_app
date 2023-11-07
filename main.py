@@ -5,7 +5,6 @@ from datetime import datetime
 from locations import locations
 from classes import Weather, Geocode, map_api_key
 
-
 app = Flask(__name__)
 
 
