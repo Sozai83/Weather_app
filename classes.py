@@ -70,8 +70,8 @@ class Weather:
             self.weather = cur_weather['weather'][0]['main']
             self.humidity = cur_weather['humidity']
             self.temp = cur_weather['temp']
-            self.temp_min = todays_weather['temp']['max']
-            self.temp_max = todays_weather['temp']['min']
+            self.temp_min = todays_weather['temp']['min']
+            self.temp_max = todays_weather['temp']['max']
             self.icon = f"https://openweathermap.org/img/wn/{cur_weather['weather'][0]['icon']}@2x.png"
             self.icon_small = f"https://openweathermap.org/img/wn/{cur_weather['weather'][0]['icon']}.png"
             self.date = datetime.utcfromtimestamp(cur_weather['dt']).strftime('%Y/%m/%d %I%p')
