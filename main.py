@@ -49,8 +49,6 @@ def home():
 def check_weather():
 
     try:
-        print(request.form['location'])
-        print(request.form['location_other'])
         location = request.form['location'] if request.form['location'] != 'Other' else request.form['location_other']
         unit = request.form['unit'] if request.form['unit'] else 'metric'
 
@@ -62,11 +60,8 @@ def check_weather():
         try:
             #Create a Weather object
             weather = Weather(location, latitude, longitude, unit)
-            # calsls the check_weather funcion to check current weather and store the data in the object
-            cur_weather, temp, temp_max, temp_min, humidity, icon, icon_small, date = weather.check_weather()
-            # calsls the check_weather_forecast function to check weather in the location for next 8 days and store the data in the object
-            weather_next_7days = weather.check_weather_forecast()
-
+            # calls the check_weather funcion to check current weather and store the data in the object
+            cur_weather, temp, temp_max, temp_min, humidity, icon, icon_small, date, weather_next_7days = weather.check_weather()
 
             return render_template('weather.html', 
                                     location = location,

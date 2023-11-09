@@ -17,8 +17,7 @@ geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
 # Google map API - Embed map API URL
 map_url = 'https://www.google.com/maps/embed/v1/place'
 # Open Weather API - 
-weather_url = 'https://api.openweathermap.org/data/2.5/weather'
-weather_forecast_url = 'https://api.openweathermap.org/data/3.0/onecall'
+weather_url = 'https://api.openweathermap.org/data/3.0/onecall'
 
 
 
@@ -60,40 +59,36 @@ class Weather:
     
     # Get current weather for the location
     def check_weather(self):
-        resp = requests.get(f'{weather_url}?lat={self.latitude}&lon={self.longitude}&units={self.unit}&zoom=0&appid={weather_api_key}')
+        resp = requests.get(f'{weather_url}?lat={self.latitude}&lon={self.longitude}&units={self.unit}&exclude=hourly,minutely,alerts&appid={weather_api_key}')
         
         if resp.status_code == 200:
             resp_json = resp.json()
-            self.weather = resp_json['weather'][0]['main']
-            self.temp = resp_json['main']['temp']
-            self.temp_max = resp_json['main']['temp_max']
-            self.temp_min = resp_json['main']['temp_min']
-            self.humidity = resp_json['main']['humidity']
-            self.icon = f"https://openweathermap.org/img/wn/{resp_json['weather'][0]['icon']}@2x.png"
-            self.icon_small = f"https://openweathermap.org/img/wn/{resp_json['weather'][0]['icon']}.png"
-            self.date = datetime.utcfromtimestamp(resp_json["dt"]).strftime('%Y/%m/%d %I%p')
+            weather_forecast = resp_json['daily']
+            cur_weather = resp_json['current']
+            todays_weather = weather_forecast[0]
 
-            return self.weather,self.temp, self.temp_max, self.temp_min, self.humidity, self.icon, self.icon_small, self.date
-        else:
-            return jsonify(message=f'Filed to retrieve current weather. Please try again. Error:{resp.status_code}', status=resp.status_code)
+            self.weather = cur_weather['weather'][0]['main']
+            self.humidity = cur_weather['humidity']
+            self.temp = cur_weather['temp']
+            self.temp_min = todays_weather['temp']['max']
+            self.temp_max = todays_weather['temp']['min']
+            self.icon = f"https://openweathermap.org/img/wn/{cur_weather['weather'][0]['icon']}@2x.png"
+            self.icon_small = f"https://openweathermap.org/img/wn/{cur_weather['weather'][0]['icon']}.png"
+            self.date = datetime.utcfromtimestamp(cur_weather['dt']).strftime('%Y/%m/%d %I%p')
 
-    # Get weather forecast for next 8 days for the location
-    def check_weather_forecast(self):
-        resp = requests.get(f'{weather_forecast_url}?lat={self.latitude}&lon={self.longitude}&units={self.unit}&exclude=hourly,current,minutely,alerts&appid={weather_api_key}')
-        
-        if resp.status_code == 200:
+            # Get weather forecast for next 8 days for the location and filtering the data
             weather_next_7days = map(lambda x: 
-                                    {
-                                        'date': datetime.utcfromtimestamp(x['dt']).strftime('%m/%d'), 
-                                        'temp_min': x['temp']['min'],
-                                        'temp_max': x['temp']['max'],
-                                        'weather': x['weather'][0]['main'],
-                                        'icon': f"https://openweathermap.org/img/wn/{x['weather'][0]['icon']}.png"
-                                    } 
-                                    ,resp.json()['daily'][1:])
+                {
+                    'date': datetime.utcfromtimestamp(x['dt']).strftime('%m/%d'), 
+                    'temp_min': x['temp']['min'],
+                    'temp_max': x['temp']['max'],
+                    'weather': x['weather'][0]['main'],
+                    'icon': f"https://openweathermap.org/img/wn/{x['weather'][0]['icon']}.png"
+                } 
+                ,weather_forecast[1:])
+            
             self.weather_next_7days = list(weather_next_7days)
 
-            return self.weather_next_7days
-            
+            return self.weather,self.temp, self.temp_max, self.temp_min, self.humidity, self.icon, self.icon_small, self.date, self.weather_next_7days
         else:
-            return  jsonify(message=f'Filed to retrieve weather forecast data. Please try again. Error:{resp.status_code}', status=resp.status_code)
+            return jsonify(message=f'Filed to retrieve current weather. Please try again. Error:{resp.status_code}', status=resp.status_code)
