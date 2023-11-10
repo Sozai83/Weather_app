@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 
 @app.route('/')
+@app.route('/home')
 def home():
     locations_list = list(locations)
 
@@ -16,7 +17,7 @@ def home():
     def get_weather_map_items(location):
             geo_code = Geocode(location)
             latitude, longitude = geo_code.check_geocode()
-            weather = Weather(location, latitude, longitude)
+            weather = Weather(latitude, longitude)
             weather.check_weather()
             
             return (weather.icon_small,latitude,longitude)
@@ -59,9 +60,11 @@ def check_weather():
 
         try:
             #Create a Weather object
-            weather = Weather(location, latitude, longitude, unit)
+            weather = Weather(latitude, longitude, unit)
             # calls the check_weather funcion to check current weather and store the data in the object
             cur_weather, temp, temp_max, temp_min, humidity, icon, icon_small, date, weather_next_7days = weather.check_weather()
+            # Generate location map 
+            map = weather.generate_map()
 
             return render_template('weather.html', 
                                     location = location,
@@ -76,7 +79,7 @@ def check_weather():
                                     next_7days = weather_next_7days,
                                     latitude = latitude,
                                     longitude = longitude,
-                                    map= weather.map
+                                    map= map
                                     )
         # If the geocode cannot be found, return the error page
         except:

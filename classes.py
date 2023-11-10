@@ -50,12 +50,14 @@ class Geocode:
 
 
 class Weather:
-    def __init__(self, location, latitude, longitude, unit='metric'):
-        self.location = location
+    def __init__(self, latitude, longitude, unit='metric'):
         self.latitude = latitude
         self.longitude = longitude
         self.unit = unit
+
+    def generate_map(self):
         self.map = f'{map_url}?key={map_api_key}&q={self.latitude},{self.longitude}&zoom=7'
+        return self.map
     
     # Get current weather for the location
     def check_weather(self):
