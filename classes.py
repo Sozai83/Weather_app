@@ -1,5 +1,6 @@
 from flask import Flask, url_for, render_template, request, redirect, jsonify
 import requests, os, json, threading, asyncio
+import concurrent.futures
 from datetime import datetime
 from locations import locations
 
@@ -45,7 +46,7 @@ class Geocode:
                 return self.latitude, self.longitude
 
             else:
-                return  jsonify(message=f'Filed to retrieve geocode. Please try again. Error:{resp.status_code}', status=resp.status_code)
+                raise Exception(f'Filed to retrieve geocode. Please try again. Error:{resp.status_code}')
         
 
 
@@ -93,4 +94,37 @@ class Weather:
 
             return self.weather,self.temp, self.temp_max, self.temp_min, self.humidity, self.icon, self.icon_small, self.date, self.weather_next_7days
         else:
-            return jsonify(message=f'Filed to retrieve current weather. Please try again. Error:{resp.status_code}', status=resp.status_code)
+            raise Excption (f'Filed to retrieve current weather. Please try again. Error:{resp.status_code}')
+
+
+
+def get_map_with_weather(locations):
+        # Function to return latitude, longitude and the weather icon
+    def get_weather_map_items(location):
+            geo_code = Geocode(location)
+            latitude, longitude = geo_code.check_geocode()
+            weather = Weather(latitude, longitude)
+            weather.check_weather()
+            
+            return (weather.icon_small,latitude,longitude)
+
+    markers=[]
+    # Create threads to excute get_weather_map_items asyncronically for each location
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        get_weather_result = executor.map(get_weather_map_items, locations)
+
+        # Add markers for each location
+        for weather in get_weather_result:
+            icon, lat, lng = weather
+            markers.append(f'markers=icon:{icon}|{lat},{lng}')
+
+
+    # Google Map Static API - Create a map image containing weatehr icons for each location 
+    gmap = f"""
+    https://maps.googleapis.com/maps/api/staticmap?center=Manchester,UK&zoom=6&size=1200x600
+    &style=visibility:on&style=feature:water|element:geometry|visibility:on
+    &style=feature:landscape|element:geometry|visibility:on
+    &{'&'.join(markers)}
+    &key={map_api_key}
+    """
+    return gmap

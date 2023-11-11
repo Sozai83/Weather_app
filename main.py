@@ -3,7 +3,7 @@ import requests, os, json, threading, asyncio
 import concurrent.futures
 from datetime import datetime
 from locations import locations
-from classes import Weather, Geocode, map_api_key
+from classes import Weather, Geocode, get_map_with_weather
 
 app = Flask(__name__)
 
@@ -12,37 +12,9 @@ app = Flask(__name__)
 @app.route('/home')
 def home():
     locations_list = list(locations)
+    map = get_map_with_weather(locations_list)
 
-    # Function to return latitude, longitude and the weather icon
-    def get_weather_map_items(location):
-            geo_code = Geocode(location)
-            latitude, longitude = geo_code.check_geocode()
-            weather = Weather(latitude, longitude)
-            weather.check_weather()
-            
-            return (weather.icon_small,latitude,longitude)
-
-    markers=[]
-    # Create threads to excute get_weather_map_items asyncronically for each location
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        get_weather_result = executor.map(get_weather_map_items, locations_list)
-
-        # Add markers for each location
-        for weather in get_weather_result:
-            icon, lat, lng = weather
-            markers.append(f'markers=icon:{icon}|{lat},{lng}')
-
-
-    # Google Map Static API - Create a map image containing weatehr icons for each location 
-    gmap = f"""
-    https://maps.googleapis.com/maps/api/staticmap?center=Manchester,UK&zoom=6&size=1200x600
-    &style=visibility:on&style=feature:water|element:geometry|visibility:on
-    &style=feature:landscape|element:geometry|visibility:on
-    &{'&'.join(markers)}
-    &key={map_api_key}
-    """
-
-    return  render_template('index.html', locations=locations, gmap=gmap)
+    return  render_template('index.html', locations=locations, map=map)
 
 
 # Check weather for the selected location, and return data using weather.html template
@@ -50,6 +22,7 @@ def home():
 def check_weather():
 
     try:
+        # If the location is 
         location = request.form['location'] if request.form['location'] != 'Other' else request.form['location_other']
         unit = request.form['unit'] if request.form['unit'] else 'metric'
 
