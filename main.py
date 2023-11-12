@@ -1,9 +1,6 @@
 from flask import Flask, url_for, render_template, request, redirect
-import requests, os, json, threading, asyncio
-import concurrent.futures
-from datetime import datetime
 from locations import locations
-from classes import Weather, Geocode, get_map_with_weather
+from get_weather_location import Weather, Geocode, get_map_with_weather
 
 app = Flask(__name__)
 

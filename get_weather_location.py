@@ -1,4 +1,3 @@
-from flask import Flask, url_for, render_template, request, redirect, jsonify
 import requests, os, json, threading, asyncio
 import concurrent.futures
 from datetime import datetime
@@ -94,7 +93,7 @@ class Weather:
 
             return self.weather,self.temp, self.temp_max, self.temp_min, self.humidity, self.icon, self.icon_small, self.date, self.weather_next_7days
         else:
-            raise Excption (f'Filed to retrieve current weather. Please try again. Error:{resp.status_code}')
+            raise Exception (f'Filed to retrieve current weather. Please try again. Error:{resp.status_code}')
 
 
 
