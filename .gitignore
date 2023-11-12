@@ -3,3 +3,4 @@ package-lock.json
 node_modules
 __pycache__
 .idea
+api_key.txt

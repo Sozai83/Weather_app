@@ -4,12 +4,22 @@ from datetime import datetime
 from locations import locations
 
 
+# # API Key for geocode_url
+# geocode_api_key = os.environ.get('GoogleMapAPIKey')
+# # API Key for map_url
+# map_api_key = os.environ.get('GoogleMapAPIKeyLimited')
+# # API Key for weather_url and weather_forecast_url
+# weather_api_key = os.environ.get('OpenWeather_API_key')
+
+with open('api_key.txt') as f:
+    api_keys = json.load(f)
+
 # API Key for geocode_url
-geocode_api_key = os.environ.get('GoogleMapAPIKey')
+geocode_api_key = api_keys['GoogleMapAPIKey']
 # API Key for map_url
-map_api_key = os.environ.get('GoogleMapAPIKeyLimited')
+map_api_key = api_keys['GoogleMapAPIKeyLimited']
 # API Key for weather_url and weather_forecast_url
-weather_api_key = os.environ.get('OpenWeather_API_key')
+weather_api_key = api_keys['OpenWeather_API_key']
 
 
 # Google map API - Retrieve longitude and latitude based on location
